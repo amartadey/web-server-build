@@ -720,7 +720,120 @@ https://dev.webgraphicshub.com/wp-admin
 
 ---
 
-## Part 10: Fix Auto-Start Issues
+## Part 10: Configure WordPress Emails to Mailpit
+
+By default, WordPress sends emails using PHP's `mail()` function, which uses the system's mail transfer agent (Exim4). To automatically route all WordPress emails to Mailpit without needing plugins, we need to configure Exim4.
+
+### Step 10.1: Edit Exim4 Template
+
+```bash
+# Edit the Exim template file
+sudo nano /etc/exim4/exim4.conf.template
+```
+
+### Step 10.2: Add Mailpit Router
+
+In the nano editor:
+
+1. Press **Ctrl+W** (search)
+2. Type: `begin routers`
+3. Press **Enter**
+
+You'll see a line that says `begin routers`.
+
+**Add these lines IMMEDIATELY after `begin routers`:**
+
+```
+# Mailpit catch-all router for development
+mailpit_catchall:
+  driver = manualroute
+  domains = *
+  transport = mailpit_smtp
+  route_list = "* localhost byname"
+  host_find_failed = defer
+  self = send
+  no_more
+
+```
+
+### Step 10.3: Add Mailpit Transport
+
+1. Press **Ctrl+W** again
+2. Type: `begin transports`
+3. Press **Enter**
+
+**Add these lines IMMEDIATELY after `begin transports`:**
+
+```
+mailpit_smtp:
+  driver = smtp
+  port = 1025
+  hosts_require_auth = <;
+  hosts_try_auth = <;
+
+```
+
+**Save the file:**
+- Press `Ctrl+X`
+- Press `Y`
+- Press `Enter`
+
+### Step 10.4: Update and Restart Exim4
+
+```bash
+# Update Exim config from the template
+sudo update-exim4.conf
+
+# Restart Exim4
+sudo systemctl restart exim4
+
+# Check status
+sudo systemctl status exim4
+```
+
+You should see **"active (running)"** in green.
+
+### Step 10.5: Test Email Routing
+
+```bash
+# Send a test email
+echo "Test email to Mailpit" | mail -s "Test Subject" test@example.com
+
+# Wait a moment
+sleep 2
+
+# Check Exim logs - you should see delivery to localhost:1025
+sudo tail -10 /var/log/exim4/mainlog
+```
+
+You should see a line like:
+```
+=> test@example.com R=mailpit_catchall T=mailpit_smtp H=localhost [127.0.0.1]:1025
+```
+
+**Now check Mailpit:** https://email.webgraphicshub.com
+
+The test email should appear there!
+
+### Step 10.6: How It Works
+
+With this configuration:
+
+- ✅ **All WordPress emails** automatically go to Mailpit
+- ✅ **No plugins needed** - works with any WordPress site
+- ✅ **New WordPress installations** automatically use Mailpit
+- ✅ **Password reset emails**, comment notifications, etc. all captured
+- ✅ **Safe for development** - no emails accidentally sent to real addresses
+
+### Step 10.7: Verify with WordPress
+
+1. Go to your WordPress admin: https://dev.webgraphicshub.com/wp-admin
+2. Try to reset a password or send a test email
+3. Check https://email.webgraphicshub.com - the email should appear!
+
+---
+
+## Part 11: Fix Auto-Start Issues
 
 To prevent services from failing to start after a reboot (due to network not being ready), we need to configure systemd overrides.
 
