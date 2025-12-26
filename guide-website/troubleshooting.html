@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting - Server Rebuild Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-server"></i>
+                <span>Server Rebuild Guide</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="prerequisites.html"><i class="fas fa-list-check"></i> Prerequisites</a></li>
+                <li><a href="installation.html"><i class="fas fa-download"></i> Installation</a></li>
+                <li><a href="configuration.html"><i class="fas fa-cog"></i> Configuration</a></li>
+                <li><a href="troubleshooting.html" class="active"><i class="fas fa-wrench"></i> Troubleshooting</a></li>
+                <li><a href="reference.html"><i class="fas fa-book"></i> Quick Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <section class="page-header">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <span><i class="fas fa-chevron-right"></i></span>
+                <span>Troubleshooting</span>
+            </div>
+            <h1 class="page-title">
+                <i class="fas fa-wrench"></i>
+                <span class="gradient-text">Troubleshooting</span>
+            </h1>
+            <p class="page-subtitle">Common issues and their solutions</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="content-layout">
+                <aside class="sidebar">
+                    <div class="toc-sticky">
+                        <h3>Common Issues</h3>
+                        <div id="tableOfContents"></div>
+                    </div>
+                </aside>
+
+                <div class="main-content">
+                    <div class="content-section">
+                        <h2 id="502-error">Issue: 502 Bad Gateway After Reboot</h2>
+
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <strong>Cause:</strong> Services didn't start automatically because the network wasn't
+                                ready.
+                            </div>
+                        </div>
+
+                        <h3>Solution</h3>
+                        <pre><code># Check which services are down
+sudo systemctl status nginx
+sudo systemctl status apache2
+sudo systemctl status hestia
+sudo systemctl status cloudflared
+
+# Start any failed services
+sudo systemctl start nginx
+sudo systemctl start apache2
+sudo systemctl start hestia
+sudo systemctl restart cloudflared
+
+# Wait 30 seconds, then test websites</code></pre>
+
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                If you've applied the fixes in Part 10 of the installation guide, this shouldn't happen
+                                again.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 id="ssh-connection">Issue: Can't Connect via SSH</h2>
+
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <strong>Cause:</strong> Firewall blocking port 22 or SSH service not running.
+                            </div>
+                        </div>
+
+                        <h3>Solution</h3>
+                        <pre><code># Check if SSH is running
+sudo systemctl status ssh
+
+# If not running, start it
+sudo systemctl start ssh
+
+# Make sure firewall allows SSH
+sudo ufw allow 22/tcp
+sudo ufw reload</code></pre>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 id="cloudflare-tunnel">Issue: Cloudflare Tunnel Not Working</h2>
+
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <strong>Cause:</strong> Tunnel service not running or configuration error.
+                            </div>
+                        </div>
+
+                        <h3>Solution</h3>
+                        <pre><code># Check tunnel status
+sudo systemctl status cloudflared
+
+# View detailed logs
+sudo journalctl -u cloudflared -n 50 --no-pager
+
+# Restart tunnel
+sudo systemctl restart cloudflared
+
+# Verify config file
+sudo cat /etc/cloudflared/config.yml</code></pre>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                Make sure the Tunnel ID in the config matches your actual tunnel ID.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 id="wordpress-not-loading">Issue: WordPress Site Not Loading</h2>
+
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <strong>Cause:</strong> Apache or Nginx not running, or file permissions issue.
+                            </div>
+                        </div>
+
+                        <h3>Solution</h3>
+                        <pre><code># Check if Apache and Nginx are running
+sudo systemctl status apache2
+sudo systemctl status nginx
+
+# Check what's listening on port 80
+sudo netstat -tlnp | grep :80
+
+# Fix file permissions
+sudo chown -R dev:dev /home/dev/web/dev.webgraphicshub.com/public_html/
+sudo chmod -R 755 /home/dev/web/dev.webgraphicshub.com/public_html/</code></pre>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 id="mailpit-not-accessible">Issue: Mailpit Not Accessible</h2>
+
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <strong>Cause:</strong> Docker container not running.
+                            </div>
+                        </div>
+
+                        <h3>Solution</h3>
+                        <pre><code># Check if Mailpit is running
+docker ps
+
+# If not running, start it
+cd ~/mailpit
+docker-compose up -d
+
+# Check logs
+docker logs mailpit</code></pre>
+                    </div>
+
+                    <div class="page-navigation">
+                        <a href="configuration.html" class="nav-btn nav-prev">
+                            <i class="fas fa-arrow-left"></i>
+                            <div>
+                                <span class="nav-label">Previous</span>
+                                <span class="nav-title">Configuration</span>
+                            </div>
+                        </a>
+                        <a href="reference.html" class="nav-btn nav-next">
+                            <div>
+                                <span class="nav-label">Next</span>
+                                <span class="nav-title">Quick Reference</span>
+                            </div>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Server Rebuild Guide. Last Updated: December 26, 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>

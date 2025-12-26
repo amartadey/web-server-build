@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - Server Rebuild Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-server"></i>
+                <span>Server Rebuild Guide</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="prerequisites.html"><i class="fas fa-list-check"></i> Prerequisites</a></li>
+                <li><a href="installation.html"><i class="fas fa-download"></i> Installation</a></li>
+                <li><a href="configuration.html" class="active"><i class="fas fa-cog"></i> Configuration</a></li>
+                <li><a href="troubleshooting.html"><i class="fas fa-wrench"></i> Troubleshooting</a></li>
+                <li><a href="reference.html"><i class="fas fa-book"></i> Quick Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <section class="page-header">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <span><i class="fas fa-chevron-right"></i></span>
+                <span>Configuration</span>
+            </div>
+            <h1 class="page-title">
+                <i class="fas fa-cog"></i>
+                <span class="gradient-text">Advanced Configuration</span>
+            </h1>
+            <p class="page-subtitle">Additional configuration options and customization</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="content-layout">
+                <aside class="sidebar">
+                    <div class="toc-sticky">
+                        <h3>On This Page</h3>
+                        <div id="tableOfContents"></div>
+                    </div>
+                </aside>
+
+                <div class="main-content">
+                    <div class="content-section">
+                        <h2 id="cloudflare-waf">Cloudflare WAF Configuration</h2>
+                        <p>Restrict access to your server by country or other criteria using Cloudflare's Web
+                            Application Firewall.</p>
+
+                        <h3>Block All Countries Except India</h3>
+                        <ol>
+                            <li>Go to Cloudflare Dashboard → Security → WAF</li>
+                            <li>Click "Create rule"</li>
+                            <li>Configure:
+                                <ul>
+                                    <li><strong>Field:</strong> Hostname</li>
+                                    <li><strong>Operator:</strong> equals</li>
+                                    <li><strong>Value:</strong> <code>server.webgraphicshub.com</code></li>
+                                    <li><strong>AND Country:</strong> is not in → India (IN)</li>
+                                    <li><strong>Then:</strong> Block</li>
+                                </ul>
+                            </li>
+                            <li>Click "Deploy"</li>
+                        </ol>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>Tip:</strong> You can create separate rules for each subdomain with different
+                                access restrictions.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 id="mailpit-auth">Mailpit Password Protection</h2>
+                        <p>Add authentication to Mailpit using Cloudflare Access or Nginx Basic Auth.</p>
+
+                        <h3>Option 1: Cloudflare Access (Recommended)</h3>
+                        <ol>
+                            <li>Go to Cloudflare Dashboard → Zero Trust → Access → Applications</li>
+                            <li>Click "Add an application" → "Self-hosted"</li>
+                            <li>Configure:
+                                <ul>
+                                    <li><strong>Application name:</strong> Mailpit</li>
+                                    <li><strong>Subdomain:</strong> email</li>
+                                    <li><strong>Domain:</strong> webgraphicshub.com</li>
+                                </ul>
+                            </li>
+                            <li>Create policy to allow specific emails</li>
+                            <li>Save</li>
+                        </ol>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 id="vs-code-team">VS Code for Multiple Developers</h2>
+                        <p>Set up individual developer accounts for better collaboration and tracking.</p>
+
+                        <pre><code># Create developer accounts
+sudo useradd -m -s /bin/bash dev1
+sudo useradd -m -s /bin/bash dev2
+sudo useradd -m -s /bin/bash dev3
+
+# Set passwords
+sudo passwd dev1
+sudo passwd dev2
+sudo passwd dev3
+
+# Add to www-data group
+sudo usermod -aG www-data dev1
+sudo usermod -aG www-data dev2
+sudo usermod -aG www-data dev3
+
+# Give access to project folders
+sudo setfacl -R -m g:www-data:rwx /home/dev/web/dev.webgraphicshub.com/public_html/
+sudo setfacl -R -d -m g:www-data:rwx /home/dev/web/dev.webgraphicshub.com/public_html/</code></pre>
+                    </div>
+
+                    <div class="page-navigation">
+                        <a href="installation.html" class="nav-btn nav-prev">
+                            <i class="fas fa-arrow-left"></i>
+                            <div>
+                                <span class="nav-label">Previous</span>
+                                <span class="nav-title">Installation</span>
+                            </div>
+                        </a>
+                        <a href="troubleshooting.html" class="nav-btn nav-next">
+                            <div>
+                                <span class="nav-label">Next</span>
+                                <span class="nav-title">Troubleshooting</span>
+                            </div>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Server Rebuild Guide. Last Updated: December 26, 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>

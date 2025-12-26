@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HestiaCP Development Server - Complete Rebuild Guide</title>
+    <meta name="description"
+        content="Step-by-step guide to rebuild a complete development server with HestiaCP, Cloudflare Tunnel, WordPress, and Mailpit">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-server"></i>
+                <span>Server Rebuild Guide</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="prerequisites.html"><i class="fas fa-list-check"></i> Prerequisites</a></li>
+                <li><a href="installation.html"><i class="fas fa-download"></i> Installation</a></li>
+                <li><a href="configuration.html"><i class="fas fa-cog"></i> Configuration</a></li>
+                <li><a href="troubleshooting.html"><i class="fas fa-wrench"></i> Troubleshooting</a></li>
+                <li><a href="reference.html"><i class="fas fa-book"></i> Quick Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Complete Server Rebuild Guide</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Build a professional development server with HestiaCP, Cloudflare Tunnel, WordPress, and Mailpit
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <span class="stat-number">~60 min</span>
+                            <span class="stat-label">Setup Time</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-layer-group"></i>
+                        <div class="stat-info">
+                            <span class="stat-number">12 Parts</span>
+                            <span class="stat-label">Step-by-Step</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="stat-info">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Beginner Friendly</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-cta">
+                    <a href="prerequisites.html" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </a>
+                    <a href="#overview" class="btn btn-secondary">
+                        <i class="fas fa-info-circle"></i> Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="section" id="overview">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What You'll Build</h2>
+                <p class="section-subtitle">A complete, production-ready development server accessible from anywhere</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>HestiaCP Control Panel</h3>
+                    <p>Free, powerful web hosting control panel for managing your server with an intuitive interface</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Web server management</li>
+                        <li><i class="fas fa-check"></i> Database administration</li>
+                        <li><i class="fas fa-check"></i> FTP/SFTP access</li>
+                        <li><i class="fas fa-check"></i> SSL certificates</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>Cloudflare Tunnel</h3>
+                    <p>Bypass CGNAT and access your server from anywhere without port forwarding</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> No public IP needed</li>
+                        <li><i class="fas fa-check"></i> Automatic SSL/TLS</li>
+                        <li><i class="fas fa-check"></i> DDoS protection</li>
+                        <li><i class="fas fa-check"></i> Global CDN</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-wordpress"></i>
+                    </div>
+                    <h3>WordPress Development</h3>
+                    <p>Quick WordPress installation with full development environment</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> One-click installation</li>
+                        <li><i class="fas fa-check"></i> Multiple sites support</li>
+                        <li><i class="fas fa-check"></i> VS Code integration</li>
+                        <li><i class="fas fa-check"></i> Team collaboration</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Mailpit Email Testing</h3>
+                    <p>Catch and test all emails locally without sending to real addresses</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Email preview</li>
+                        <li><i class="fas fa-check"></i> HTML/Text view</li>
+                        <li><i class="fas fa-check"></i> Attachment support</li>
+                        <li><i class="fas fa-check"></i> Search functionality</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-docker"></i>
+                    </div>
+                    <h3>Docker Containers</h3>
+                    <p>Containerized services for easy management and deployment</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Isolated environments</li>
+                        <li><i class="fas fa-check"></i> Easy updates</li>
+                        <li><i class="fas fa-check"></i> Resource efficient</li>
+                        <li><i class="fas fa-check"></i> Auto-restart</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>VS Code Remote</h3>
+                    <p>Edit files directly on the server with full VS Code functionality</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> SSH integration</li>
+                        <li><i class="fas fa-check"></i> IntelliSense support</li>
+                        <li><i class="fas fa-check"></i> Extensions enabled</li>
+                        <li><i class="fas fa-check"></i> Terminal access</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Server Architecture</h2>
+                <p class="section-subtitle">Understanding how all components work together</p>
+            </div>
+
+            <div class="architecture-diagram">
+                <div class="arch-layer">
+                    <div class="arch-title">Internet</div>
+                    <div class="arch-component">
+                        <i class="fas fa-globe"></i>
+                        <span>Users Worldwide</span>
+                    </div>
+                </div>
+
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <div class="arch-layer">
+                    <div class="arch-title">Cloudflare</div>
+                    <div class="arch-row">
+                        <div class="arch-component">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>DDoS Protection</span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-lock"></i>
+                            <span>SSL/TLS</span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-network-wired"></i>
+                            <span>CDN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <div class="arch-layer">
+                    <div class="arch-title">Cloudflare Tunnel</div>
+                    <div class="arch-component highlight">
+                        <i class="fas fa-tunnel"></i>
+                        <span>Secure Connection (No Port Forwarding)</span>
+                    </div>
+                </div>
+
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <div class="arch-layer">
+                    <div class="arch-title">Your Proxmox Server</div>
+                    <div class="arch-row">
+                        <div class="arch-component">
+                            <i class="fas fa-server"></i>
+                            <span>HestiaCP<br><small>server.webgraphicshub.com</small></span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fab fa-wordpress"></i>
+                            <span>WordPress<br><small>dev.webgraphicshub.com</small></span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-envelope"></i>
+                            <span>Mailpit<br><small>email.webgraphicshub.com</small></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <h4>Behind CGNAT?</h4>
+                        <p>No problem! Cloudflare Tunnel works perfectly behind CGNAT, dynamic IPs, and restrictive
+                            firewalls.</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-globe"></i>
+                    <div>
+                        <h4>Access Anywhere</h4>
+                        <p>Your development server is accessible from anywhere in the world with your custom domain.</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-lock"></i>
+                    <div>
+                        <h4>Secure by Default</h4>
+                        <p>All traffic is encrypted with SSL/TLS, and you can add country restrictions via Cloudflare
+                            WAF.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Steps Overview -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Installation Steps</h2>
+                <p class="section-subtitle">Follow these 12 parts to build your complete server</p>
+            </div>
+
+            <div class="steps-timeline">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Create Ubuntu Server on Proxmox</h3>
+                        <p>Download Ubuntu 22.04 LTS ISO and create a new VM with 8GB RAM and 100GB disk</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~10 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Initial Server Setup</h3>
+                        <p>SSH into server, update packages, and install essential tools</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~5 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Install Docker</h3>
+                        <p>Install Docker and Docker Compose for containerized applications</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~5 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Install HestiaCP</h3>
+                        <p>Install the free control panel for easy server management</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~15 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Install Mailpit</h3>
+                        <p>Set up email testing tool using Docker</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~3 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3>Configure Firewall</h3>
+                        <p>Set up UFW firewall rules for security</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~3 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">7</div>
+                    <div class="step-content">
+                        <h3>Setup Cloudflare Tunnel</h3>
+                        <p>Install and configure Cloudflare Tunnel for public access</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~10 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">8</div>
+                    <div class="step-content">
+                        <h3>Create Development Sites</h3>
+                        <p>Set up Docker containers for development websites</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~5 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">9</div>
+                    <div class="step-content">
+                        <h3>Install WordPress via HestiaCP</h3>
+                        <p>Create user, add domain, and install WordPress</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~5 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">10</div>
+                    <div class="step-content">
+                        <h3>Fix Auto-Start Issues</h3>
+                        <p>Configure systemd to ensure services start on reboot</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~5 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">11</div>
+                    <div class="step-content">
+                        <h3>Enable SSH for Dev User</h3>
+                        <p>Allow SSH access for the development user</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~2 minutes</span>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">12</div>
+                    <div class="step-content">
+                        <h3>VS Code Remote Setup</h3>
+                        <p>Configure VS Code for remote development</p>
+                        <span class="step-time"><i class="fas fa-clock"></i> ~5 minutes</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box">
+                <h3>Ready to Get Started?</h3>
+                <p>Follow the step-by-step guide to build your development server</p>
+                <a href="prerequisites.html" class="btn btn-primary btn-large">
+                    <i class="fas fa-rocket"></i> Start Building Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About This Guide</h4>
+                    <p>Complete step-by-step instructions for building a professional development server with HestiaCP,
+                        Cloudflare Tunnel, and WordPress.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="prerequisites.html">Prerequisites</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="configuration.html">Configuration</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://hestiacp.com" target="_blank">HestiaCP Documentation</a></li>
+                        <li><a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/"
+                                target="_blank">Cloudflare Tunnel Docs</a></li>
+                        <li><a href="https://wordpress.org" target="_blank">WordPress.org</a></li>
+                        <li><a href="https://github.com/axllent/mailpit" target="_blank">Mailpit GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Tech Stack</h4>
+                    <ul>
+                        <li><i class="fab fa-ubuntu"></i> Ubuntu 22.04 LTS</li>
+                        <li><i class="fas fa-server"></i> HestiaCP</li>
+                        <li><i class="fas fa-cloud"></i> Cloudflare</li>
+                        <li><i class="fab fa-docker"></i> Docker</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Server Rebuild Guide. Last Updated: December 26, 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>

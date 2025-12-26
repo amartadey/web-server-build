@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prerequisites - Server Rebuild Guide</title>
+    <meta name="description" content="Everything you need before starting the server rebuild process">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-server"></i>
+                <span>Server Rebuild Guide</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="prerequisites.html" class="active"><i class="fas fa-list-check"></i> Prerequisites</a></li>
+                <li><a href="installation.html"><i class="fas fa-download"></i> Installation</a></li>
+                <li><a href="configuration.html"><i class="fas fa-cog"></i> Configuration</a></li>
+                <li><a href="troubleshooting.html"><i class="fas fa-wrench"></i> Troubleshooting</a></li>
+                <li><a href="reference.html"><i class="fas fa-book"></i> Quick Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <span><i class="fas fa-chevron-right"></i></span>
+                <span>Prerequisites</span>
+            </div>
+            <h1 class="page-title">
+                <i class="fas fa-list-check"></i>
+                <span class="gradient-text">Prerequisites</span>
+            </h1>
+            <p class="page-subtitle">Everything you need before starting the server rebuild</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="content-layout">
+                <!-- Sidebar TOC -->
+                <aside class="sidebar">
+                    <div class="toc-sticky">
+                        <h3>On This Page</h3>
+                        <div id="tableOfContents"></div>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- What You Need -->
+                    <div class="content-section">
+                        <h2 id="what-you-need">What You Need</h2>
+                        <p>Before starting the server rebuild process, make sure you have all the following requirements
+                            ready.</p>
+
+                        <div class="requirements-grid">
+                            <div class="requirement-card required">
+                                <div class="requirement-header">
+                                    <i class="fas fa-server"></i>
+                                    <span class="badge badge-required">Required</span>
+                                </div>
+                                <h3>Proxmox Server</h3>
+                                <p>A running Proxmox Virtual Environment server where you'll create the Ubuntu VM.</p>
+                                <ul class="check-list">
+                                    <li><i class="fas fa-check"></i> Proxmox VE 7.0 or later</li>
+                                    <li><i class="fas fa-check"></i> Access to web interface</li>
+                                    <li><i class="fas fa-check"></i> Sufficient resources available</li>
+                                </ul>
+                            </div>
+
+                            <div class="requirement-card required">
+                                <div class="requirement-header">
+                                    <i class="fas fa-globe"></i>
+                                    <span class="badge badge-required">Required</span>
+                                </div>
+                                <h3>Domain Name</h3>
+                                <p>A domain name managed through Cloudflare for the tunnel setup.</p>
+                                <ul class="check-list">
+                                    <li><i class="fas fa-check"></i> Domain registered (e.g., webgraphicshub.com)</li>
+                                    <li><i class="fas fa-check"></i> DNS managed by Cloudflare</li>
+                                    <li><i class="fas fa-check"></i> Cloudflare account access</li>
+                                </ul>
+                            </div>
+
+                            <div class="requirement-card required">
+                                <div class="requirement-header">
+                                    <i class="fas fa-memory"></i>
+                                    <span class="badge badge-required">Required</span>
+                                </div>
+                                <h3>System Resources</h3>
+                                <p>Minimum hardware resources for the virtual machine.</p>
+                                <ul class="check-list">
+                                    <li><i class="fas fa-check"></i> <strong>8GB RAM</strong> (8192 MB)</li>
+                                    <li><i class="fas fa-check"></i> <strong>100GB Disk Space</strong></li>
+                                    <li><i class="fas fa-check"></i> <strong>2-4 CPU Cores</strong></li>
+                                </ul>
+                            </div>
+
+                            <div class="requirement-card required">
+                                <div class="requirement-header">
+                                    <i class="fab fa-ubuntu"></i>
+                                    <span class="badge badge-required">Required</span>
+                                </div>
+                                <h3>Ubuntu LTS ISO</h3>
+                                <p>Ubuntu Server Long Term Support version for HestiaCP compatibility.</p>
+                                <ul class="check-list">
+                                    <li><i class="fas fa-check"></i> Ubuntu 22.04 LTS (Recommended)</li>
+                                    <li><i class="fas fa-check"></i> Ubuntu 20.04 LTS (Also supported)</li>
+                                    <li><i class="fas fa-times text-danger"></i> Non-LTS versions NOT supported</li>
+                                </ul>
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <div>
+                                        <strong>Important:</strong> HestiaCP only supports LTS (Long Term Support)
+                                        versions of Ubuntu. Always use an LTS version!
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="requirement-card required">
+                                <div class="requirement-header">
+                                    <i class="fas fa-wifi"></i>
+                                    <span class="badge badge-required">Required</span>
+                                </div>
+                                <h3>Internet Connection</h3>
+                                <p>Stable internet connection for downloading packages and updates.</p>
+                                <ul class="check-list">
+                                    <li><i class="fas fa-check"></i> Works behind CGNAT</li>
+                                    <li><i class="fas fa-check"></i> Dynamic IP is fine</li>
+                                    <li><i class="fas fa-check"></i> No port forwarding needed</li>
+                                </ul>
+                            </div>
+
+                            <div class="requirement-card optional">
+                                <div class="requirement-header">
+                                    <i class="fas fa-code"></i>
+                                    <span class="badge badge-optional">Optional</span>
+                                </div>
+                                <h3>VS Code</h3>
+                                <p>Visual Studio Code for remote development (recommended for teams).</p>
+                                <ul class="check-list">
+                                    <li><i class="fas fa-check"></i> VS Code installed</li>
+                                    <li><i class="fas fa-check"></i> Remote-SSH extension</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Network Information -->
+                    <div class="content-section">
+                        <h2 id="network-info">Network Information</h2>
+                        <p>Understanding your network setup is important for the configuration process.</p>
+
+                        <div class="info-box">
+                            <div class="info-box-header">
+                                <i class="fas fa-network-wired"></i>
+                                <h3>Network Details</h3>
+                            </div>
+                            <div class="info-box-content">
+                                <table class="info-table">
+                                    <tr>
+                                        <td><strong>Proxmox Network:</strong></td>
+                                        <td><code>192.168.29.x</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Server IP (Example):</strong></td>
+                                        <td><code>192.168.29.15</code> (assigned via DHCP)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Gateway:</strong></td>
+                                        <td><code>192.168.29.1</code> (your router)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DNS:</strong></td>
+                                        <td>Automatic (from router)</td>
+                                    </tr>
+                                </table>
+
+                                <div class="alert alert-info mt-md">
+                                    <i class="fas fa-info-circle"></i>
+                                    <div>
+                                        <strong>Note:</strong> Your actual IP address may be different. The server will
+                                        get an IP automatically via DHCP during installation. Make sure to note it down!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Domains Configuration -->
+                    <div class="content-section">
+                        <h2 id="domains">Domains Configuration</h2>
+                        <p>You'll be setting up three subdomains for different services:</p>
+
+                        <div class="domains-grid">
+                            <div class="domain-card">
+                                <div class="domain-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>server.webgraphicshub.com</h3>
+                                <p>HestiaCP control panel for server management</p>
+                                <div class="domain-features">
+                                    <span class="feature-tag"><i class="fas fa-lock"></i> SSL Enabled</span>
+                                    <span class="feature-tag"><i class="fas fa-shield-alt"></i> Country
+                                        Restricted</span>
+                                </div>
+                            </div>
+
+                            <div class="domain-card">
+                                <div class="domain-icon">
+                                    <i class="fab fa-wordpress"></i>
+                                </div>
+                                <h3>dev.webgraphicshub.com</h3>
+                                <p>WordPress development site</p>
+                                <div class="domain-features">
+                                    <span class="feature-tag"><i class="fas fa-lock"></i> SSL Enabled</span>
+                                    <span class="feature-tag"><i class="fas fa-globe"></i> Public Access</span>
+                                </div>
+                            </div>
+
+                            <div class="domain-card">
+                                <div class="domain-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h3>email.webgraphicshub.com</h3>
+                                <p>Mailpit email testing interface</p>
+                                <div class="domain-features">
+                                    <span class="feature-tag"><i class="fas fa-lock"></i> SSL Enabled</span>
+                                    <span class="feature-tag"><i class="fas fa-flask"></i> Testing Only</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>Replace with your domain:</strong> Throughout this guide, replace
+                                <code>webgraphicshub.com</code> with your actual domain name.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Software Versions -->
+                    <div class="content-section">
+                        <h2 id="software-versions">Software Versions</h2>
+                        <p>This guide uses the following software versions (latest stable as of December 2025):</p>
+
+                        <div class="versions-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Software</th>
+                                        <th>Version</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="fab fa-ubuntu"></i> Ubuntu Server</td>
+                                        <td><code>22.04 LTS</code></td>
+                                        <td>Long Term Support (Recommended)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-server"></i> HestiaCP</td>
+                                        <td><code>Latest</code></td>
+                                        <td>Auto-installed from official repo</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fab fa-docker"></i> Docker</td>
+                                        <td><code>Latest</code></td>
+                                        <td>Installed via official script</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-cloud"></i> Cloudflared</td>
+                                        <td><code>Latest</code></td>
+                                        <td>Downloaded from GitHub releases</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-envelope"></i> Mailpit</td>
+                                        <td><code>Latest</code></td>
+                                        <td>Docker image from axllent/mailpit</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fab fa-wordpress"></i> WordPress</td>
+                                        <td><code>Latest</code></td>
+                                        <td>Installed via HestiaCP quick install</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Estimated Time -->
+                    <div class="content-section">
+                        <h2 id="estimated-time">Estimated Time</h2>
+                        <p>Here's a breakdown of how long each part typically takes:</p>
+
+                        <div class="timeline-estimate">
+                            <div class="time-item">
+                                <div class="time-duration">~10 min</div>
+                                <div class="time-task">
+                                    <h4>Part 1: Create Ubuntu Server</h4>
+                                    <p>Download ISO and create VM</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~5 min</div>
+                                <div class="time-task">
+                                    <h4>Part 2: Initial Setup</h4>
+                                    <p>SSH and update packages</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~5 min</div>
+                                <div class="time-task">
+                                    <h4>Part 3: Install Docker</h4>
+                                    <p>Docker and Docker Compose</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~15 min</div>
+                                <div class="time-task">
+                                    <h4>Part 4: Install HestiaCP</h4>
+                                    <p>Control panel installation</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~3 min</div>
+                                <div class="time-task">
+                                    <h4>Part 5: Install Mailpit</h4>
+                                    <p>Email testing tool</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~3 min</div>
+                                <div class="time-task">
+                                    <h4>Part 6: Configure Firewall</h4>
+                                    <p>UFW firewall rules</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~10 min</div>
+                                <div class="time-task">
+                                    <h4>Part 7: Cloudflare Tunnel</h4>
+                                    <p>Setup and configuration</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~5 min</div>
+                                <div class="time-task">
+                                    <h4>Part 8: Development Sites</h4>
+                                    <p>Docker containers</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~5 min</div>
+                                <div class="time-task">
+                                    <h4>Part 9: WordPress</h4>
+                                    <p>Install via HestiaCP</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~5 min</div>
+                                <div class="time-task">
+                                    <h4>Part 10: Auto-Start Fix</h4>
+                                    <p>Systemd configuration</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~2 min</div>
+                                <div class="time-task">
+                                    <h4>Part 11: SSH for Dev User</h4>
+                                    <p>Enable SSH access</p>
+                                </div>
+                            </div>
+                            <div class="time-item">
+                                <div class="time-duration">~5 min</div>
+                                <div class="time-task">
+                                    <h4>Part 12: VS Code Remote</h4>
+                                    <p>Configure remote development</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="total-time-box">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h3>Total Estimated Time</h3>
+                                <p class="time-total">~60 minutes</p>
+                                <p class="time-note">Actual time may vary depending on your internet speed and
+                                    familiarity with Linux</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checklist -->
+                    <div class="content-section">
+                        <h2 id="checklist">Pre-Installation Checklist</h2>
+                        <p>Before proceeding to installation, verify you have everything ready:</p>
+
+                        <div class="checklist-box">
+                            <h3><i class="fas fa-clipboard-check"></i> Ready to Start?</h3>
+                            <div class="checklist">
+                                <label class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Proxmox server is running and accessible</span>
+                                </label>
+                                <label class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Domain name is registered and added to Cloudflare</span>
+                                </label>
+                                <label class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Cloudflare account credentials are available</span>
+                                </label>
+                                <label class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>VM resources available (8GB RAM, 100GB disk, 2-4 CPU cores)</span>
+                                </label>
+                                <label class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Internet connection is stable</span>
+                                </label>
+                                <label class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>SSH client is available (PowerShell, Terminal, or PuTTY)</span>
+                                </label>
+                                <label class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Notepad ready to save credentials and IP addresses</span>
+                                </label>
+                                <label class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Approximately 60 minutes of uninterrupted time available</span>
+                                </label>
+                            </div>
+
+                            <div class="checklist-cta">
+                                <p>All checked? You're ready to begin!</p>
+                                <a href="installation.html" class="btn btn-primary btn-large">
+                                    <i class="fas fa-rocket"></i> Start Installation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="page-navigation">
+                        <a href="index.html" class="nav-btn nav-prev">
+                            <i class="fas fa-arrow-left"></i>
+                            <div>
+                                <span class="nav-label">Previous</span>
+                                <span class="nav-title">Home</span>
+                            </div>
+                        </a>
+                        <a href="installation.html" class="nav-btn nav-next">
+                            <div>
+                                <span class="nav-label">Next</span>
+                                <span class="nav-title">Installation</span>
+                            </div>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About This Guide</h4>
+                    <p>Complete step-by-step instructions for building a professional development server with HestiaCP,
+                        Cloudflare Tunnel, and WordPress.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="prerequisites.html">Prerequisites</a></li>
+                        <li><a href="installation.html">Installation</a></li>
+                        <li><a href="configuration.html">Configuration</a></li>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://hestiacp.com" target="_blank">HestiaCP Documentation</a></li>
+                        <li><a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/"
+                                target="_blank">Cloudflare Tunnel Docs</a></li>
+                        <li><a href="https://wordpress.org" target="_blank">WordPress.org</a></li>
+                        <li><a href="https://github.com/axllent/mailpit" target="_blank">Mailpit GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Tech Stack</h4>
+                    <ul>
+                        <li><i class="fab fa-ubuntu"></i> Ubuntu 22.04 LTS</li>
+                        <li><i class="fas fa-server"></i> HestiaCP</li>
+                        <li><i class="fas fa-cloud"></i> Cloudflare</li>
+                        <li><i class="fab fa-docker"></i> Docker</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Server Rebuild Guide. Last Updated: December 26, 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
