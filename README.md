@@ -720,120 +720,7 @@ https://dev.webgraphicshub.com/wp-admin
 
 ---
 
-## Part 10: Configure WordPress Emails to Mailpit
-
-By default, WordPress sends emails using PHP's `mail()` function, which uses the system's mail transfer agent (Exim4). To automatically route all WordPress emails to Mailpit without needing plugins, we need to configure Exim4.
-
-### Step 10.1: Edit Exim4 Template
-
-```bash
-# Edit the Exim template file
-sudo nano /etc/exim4/exim4.conf.template
-```
-
-### Step 10.2: Add Mailpit Router
-
-In the nano editor:
-
-1. Press **Ctrl+W** (search)
-2. Type: `begin routers`
-3. Press **Enter**
-
-You'll see a line that says `begin routers`.
-
-**Add these lines IMMEDIATELY after `begin routers`:**
-
-```
-# Mailpit catch-all router for development
-mailpit_catchall:
-  driver = manualroute
-  domains = *
-  transport = mailpit_smtp
-  route_list = "* localhost byname"
-  host_find_failed = defer
-  self = send
-  no_more
-
-```
-
-### Step 10.3: Add Mailpit Transport
-
-1. Press **Ctrl+W** again
-2. Type: `begin transports`
-3. Press **Enter**
-
-**Add these lines IMMEDIATELY after `begin transports`:**
-
-```
-mailpit_smtp:
-  driver = smtp
-  port = 1025
-  hosts_require_auth = <;
-  hosts_try_auth = <;
-
-```
-
-**Save the file:**
-- Press `Ctrl+X`
-- Press `Y`
-- Press `Enter`
-
-### Step 10.4: Update and Restart Exim4
-
-```bash
-# Update Exim config from the template
-sudo update-exim4.conf
-
-# Restart Exim4
-sudo systemctl restart exim4
-
-# Check status
-sudo systemctl status exim4
-```
-
-You should see **"active (running)"** in green.
-
-### Step 10.5: Test Email Routing
-
-```bash
-# Send a test email
-echo "Test email to Mailpit" | mail -s "Test Subject" test@example.com
-
-# Wait a moment
-sleep 2
-
-# Check Exim logs - you should see delivery to localhost:1025
-sudo tail -10 /var/log/exim4/mainlog
-```
-
-You should see a line like:
-```
-=> test@example.com R=mailpit_catchall T=mailpit_smtp H=localhost [127.0.0.1]:1025
-```
-
-**Now check Mailpit:** https://email.webgraphicshub.com
-
-The test email should appear there!
-
-### Step 10.6: How It Works
-
-With this configuration:
-
-- ✅ **All WordPress emails** automatically go to Mailpit
-- ✅ **No plugins needed** - works with any WordPress site
-- ✅ **New WordPress installations** automatically use Mailpit
-- ✅ **Password reset emails**, comment notifications, etc. all captured
-- ✅ **Safe for development** - no emails accidentally sent to real addresses
-
-### Step 10.7: Verify with WordPress
-
-1. Go to your WordPress admin: https://dev.webgraphicshub.com/wp-admin
-2. Try to reset a password or send a test email
-3. Check https://email.webgraphicshub.com - the email should appear!
-
----
-
-## Part 11: Fix Auto-Start Issues
+## Part 10: Fix Auto-Start Issues
 
 To prevent services from failing to start after a reboot (due to network not being ready), we need to configure systemd overrides.
 
@@ -1373,7 +1260,287 @@ sudo journalctl -xe
 
 ---
 
+## Part 13: Install HestiaCP Pluginable
+
+HestiaCP Pluginable enables a plugin system for HestiaCP, allowing you to install additional features like Ghost, NodeBB, and other applications.
+
+### Step 13.1: Clone Pluginable to Hooks Folder
+
+```bash
+# Clone Pluginable v2.0.4 to the hooks folder
+sudo git clone --branch v2.0.4 https://github.com/virtuosoft-dev/hestiacp-pluginable /etc/hestiacp/hooks
+```
+
+### Step 13.2: Run Post-Install Script
+
+```bash
+# Run the post-install script
+sudo /etc/hestiacp/hooks/post_install.sh
+```
+
+This will download jQuery and set up the necessary files.
+
+### Step 13.3: Install Additional Plugins (Optional)
+
+```bash
+# Navigate to plugins directory
+cd /usr/local/hestia/plugins
+
+# Install NodeApp (required for Node.js-based plugins)
+sudo git clone https://github.com/virtuosoft-dev/hcpp-nodeapp nodeapp
+sudo chown -R root:root nodeapp
+
+# Install Ghost blogging platform
+sudo git clone https://github.com/virtuosoft-dev/hcpp-ghost ghost
+sudo chown -R root:root ghost
+
+# Install NodeBB forum software
+sudo git clone https://github.com/virtuosoft-dev/hcpp-nodebb nodebb
+sudo chown -R root:root nodebb
+
+# Install VitePress static site generator
+sudo git clone https://github.com/virtuosoft-dev/hcpp-vitepress vitepress
+sudo chown -R root:root vitepress
+
+# Restart HestiaCP
+sudo systemctl restart hestia
+```
+
+### Step 13.4: Verify Installation
+
+Login to HestiaCP and go to **WEB** → **Quick Install App**. You should now see additional applications like Ghost and NodeBB available for installation.
+
+---
+
+## Part 14: Custom Branding for HestiaCP
+
+### Step 14.1: Upload Custom Logo Files
+
+Upload your custom branding files to `/usr/local/hestia/web/images/custom/`:
+
+```bash
+# From your local PC (Windows), use SCP with legacy protocol
+scp -O logo.svg logo.png logo-header.svg favicon.png favicon.ico rahul@192.168.29.15:/tmp/
+
+# On the server, move files to custom directory
+sudo mv /tmp/logo.svg /tmp/logo.png /tmp/logo-header.svg /tmp/favicon.png /tmp/favicon.ico /usr/local/hestia/web/images/custom/
+sudo chown root:root /usr/local/hestia/web/images/custom/*
+sudo chmod 644 /usr/local/hestia/web/images/custom/*
+```
+
+### Step 14.2: Update Footer Branding
+
+Edit the footer template to change branding:
+
+```bash
+# Backup the footer file
+sudo cp /usr/local/hestia/web/templates/includes/app-footer.php /usr/local/hestia/web/templates/includes/app-footer.php.backup
+
+# Edit the footer
+sudo nano /usr/local/hestia/web/templates/includes/app-footer.php
+```
+
+Change the footer content:
+
+```php
+<footer class="app-footer">
+        <div class="container">
+                <p>
+                        <a href="https://webgraphicshub.com/" class="app-footer-link" target="_blank">
+                                WGH Control Panel
+                        </a>
+                        v<?= $_SESSION["VERSION"] ?>
+                </p>
+        </div>
+</footer>
+```
+
+---
+
+## Part 15: Customize phpMyAdmin Link
+
+By default, HestiaCP's phpMyAdmin button points to the server domain. If your phpMyAdmin is hosted on a different domain (like `dev.webgraphicshub.com`), you can redirect it using JavaScript.
+
+### Step 15.1: Edit Footer Template
+
+```bash
+# Edit the footer file (if not already edited in Part 14)
+sudo nano /usr/local/hestia/web/templates/includes/app-footer.php
+```
+
+Add this JavaScript before the closing `</footer>` tag:
+
+```php
+<footer class="app-footer">
+        <div class="container">
+                <p>
+                        <a href="https://webgraphicshub.com/" class="app-footer-link" target="_blank">
+                                WGH Control Panel
+                        </a>
+                        v<?= $_SESSION["VERSION"] ?>
+                </p>
+        </div>
+</footer>
+
+<script>
+// Redirect phpMyAdmin links to dev.webgraphicshub.com
+document.addEventListener('DOMContentLoaded', function() {
+    // Find all phpMyAdmin links
+    const pmaLinks = document.querySelectorAll('a[href*="phpmyadmin"]');
+    pmaLinks.forEach(link => {
+        const currentHref = link.getAttribute('href');
+        // Replace any host with dev.webgraphicshub.com
+        const newHref = currentHref.replace(/\/\/[^\/]+\/phpmyadmin/, '//dev.webgraphicshub.com/phpmyadmin');
+        link.setAttribute('href', newHref);
+    });
+});
+</script>
+```
+
+Save and refresh your HestiaCP page. The phpMyAdmin button will now point to `dev.webgraphicshub.com`.
+
+---
+
+## Part 16: Configure FTP for Local Network Access
+
+### Step 16.1: Create FTP Account via HestiaCP
+
+1. Login to HestiaCP at `https://server.webgraphicshub.com`
+2. Go to **WEB** tab
+3. Click on your domain (e.g., `dev.webgraphicshub.com`)
+4. Scroll to **Additional FTP Account** section
+5. Click **Add FTP Account**
+6. Create username and password
+7. Save credentials
+
+### Step 16.2: Fix vsftpd pasv_address for Local Network
+
+By default, HestiaCP sets `pasv_address` to your public IP, which doesn't work from your local network. We need to set it to your local IP and prevent HestiaCP from changing it.
+
+```bash
+# Backup vsftpd config
+sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.backup
+
+# Edit vsftpd config
+sudo nano /etc/vsftpd.conf
+```
+
+Find the line with `pasv_address` and change it to your local IP:
+
+```
+pasv_address=192.168.29.15
+```
+
+Save the file, then make it immutable to prevent HestiaCP from overwriting it:
+
+```bash
+# Make the file immutable (prevents any changes)
+sudo chattr +i /etc/vsftpd.conf
+
+# Restart vsftpd
+sudo systemctl restart vsftpd
+
+# Verify immutable flag is set
+lsattr /etc/vsftpd.conf
+```
+
+You should see an `i` flag in the output.
+
+### Step 16.3: Connect via FTP Client
+
+Use FileZilla or any FTP client:
+
+- **Host:** `192.168.29.15`
+- **Port:** `21`
+- **Protocol:** FTP (Passive Mode)
+- **Username:** Your FTP username (e.g., `dev_webdev`)
+- **Password:** Your FTP password
+
+**Important Note:** If you need to edit `/etc/vsftpd.conf` in the future:
+
+```bash
+# Remove immutable flag
+sudo chattr -i /etc/vsftpd.conf
+# Make your changes
+sudo nano /etc/vsftpd.conf
+# Re-apply immutable flag
+sudo chattr +i /etc/vsftpd.conf
+```
+
+---
+
+## Part 17: Increase File Upload Limits (Optional)
+
+The HestiaCP File Manager has a default 1GB upload limit. To increase it:
+
+### Step 17.1: Edit FileGator Configuration
+
+```bash
+# Backup the config
+sudo cp /usr/local/hestia/web/fm/configuration.php /usr/local/hestia/web/fm/configuration.php.backup
+
+# Edit the config
+sudo nano /usr/local/hestia/web/fm/configuration.php
+```
+
+Find the line with `upload_max_size` (around line 29) and change it:
+
+```php
+// Change from 1GB to 5GB
+$dist_config["frontend_config"]["upload_max_size"] = 5 * 1024 * 1024 * 1024;
+```
+
+### Step 17.2: Update PHP and Nginx Limits
+
+```bash
+# Edit PHP configuration
+sudo nano /etc/php/8.3/fpm/php.ini
+```
+
+Change these values:
+
+```ini
+upload_max_filesize = 5120M
+post_max_size = 5120M
+max_execution_time = 3600
+max_input_time = 3600
+memory_limit = 512M
+```
+
+```bash
+# Edit Nginx configuration
+sudo nano /etc/nginx/nginx.conf
+```
+
+Find and change:
+
+```nginx
+client_max_body_size 5120m;
+client_body_timeout 3600;
+send_timeout 3600;
+fastcgi_read_timeout 3600;
+```
+
+### Step 17.3: Restart Services
+
+```bash
+sudo systemctl restart nginx
+sudo systemctl restart php8.3-fpm
+```
+
+**Note:** For files larger than 1GB, it's recommended to use SFTP/SCP instead of the web file manager for better reliability.
+
+---
+
 ## Changelog
+
+### Version 1.1 (December 27, 2025)
+- Added HestiaCP Pluginable installation guide
+- Added custom branding configuration
+- Added phpMyAdmin link customization
+- Added FTP configuration for local network access
+- Added vsftpd pasv_address immutable configuration
+- Added file upload limit increase instructions
 
 ### Version 1.0 (December 26, 2025)
 - Initial guide creation
