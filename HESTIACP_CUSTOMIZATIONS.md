@@ -190,7 +190,61 @@ A client-side web application for WordPress password management, hosted on GitHu
 
 ---
 
-## 6. HestiaCP Pluginable
+## 6. WordPress Quick Install Default Directory
+
+### Overview
+Modified the WordPress Quick Install feature to use `/dev/` as the default install directory instead of `/`.
+
+### Problem
+When installing WordPress via HestiaCP's Quick Install (Web > Domain > Quick Install App), the default "Install Directory" was set to `/`, which installs WordPress in the root of the domain. For development workflow, it's more convenient to have WordPress installations go into a `/dev/` subdirectory by default.
+
+### Solution
+Modified the WordPress installer configuration file to change the default value.
+
+**File Modified:** `/usr/local/hestia/web/src/app/WebApp/Installers/WordPress/WordPressSetup.php`
+
+**Line Changed:** Line 27
+
+**Original:**
+```php
+"install_directory" => ["type" => "text", "value" => "/", "placeholder" => "/"],
+```
+
+**Modified:**
+```php
+"install_directory" => ["type" => "text", "value" => "/dev/", "placeholder" => "/dev/"],
+```
+
+### Backup
+A backup of the original file was created:
+```bash
+sudo cp /usr/local/hestia/web/src/app/WebApp/Installers/WordPress/WordPressSetup.php /usr/local/hestia/web/src/app/WebApp/Installers/WordPress/WordPressSetup.php.backup
+```
+
+### How to Edit
+```bash
+# Create backup
+sudo cp /usr/local/hestia/web/src/app/WebApp/Installers/WordPress/WordPressSetup.php /usr/local/hestia/web/src/app/WebApp/Installers/WordPress/WordPressSetup.php.backup
+
+# Edit the file
+sudo micro /usr/local/hestia/web/src/app/WebApp/Installers/WordPress/WordPressSetup.php
+
+# Navigate to line 27 (Ctrl+G, type 27, Enter)
+# Change the value from "/" to "/dev/"
+# Save (Ctrl+S) and quit (Ctrl+Q)
+```
+
+### Result
+- New WordPress installations now default to `/dev/` directory
+- The field remains editable, so you can still change it to any directory if needed
+- Existing installations are not affected
+
+### Update Considerations
+⚠️ **This file may be overwritten during HestiaCP updates.** After updating HestiaCP, re-check this file and re-apply the modification if necessary.
+
+---
+
+## 7. HestiaCP Pluginable
 
 ### Installed Plugins
 - **HCPP-NodeApp:** Node.js application management
@@ -200,7 +254,7 @@ A client-side web application for WordPress password management, hosted on GitHu
 
 ---
 
-## 7. Important Commands & Workflows
+## 8. Important Commands & Workflows
 
 ### Editing Files
 **Preferred Editor:** `micro` (not `nano`)
@@ -239,7 +293,7 @@ sudo tail -50 /var/log/nginx/error.log
 
 ---
 
-## 8. Cloudflare Tunnel Configuration
+## 9. Cloudflare Tunnel Configuration
 
 ### Tunnels
 1. **server.webgraphicshub.com** → `localhost:8083` (HestiaCP)
@@ -253,7 +307,7 @@ sudo tail -50 /var/log/nginx/error.log
 
 ---
 
-## 9. Update-Proof Modifications
+## 10. Update-Proof Modifications
 
 ### Files That Won't Be Overwritten by HestiaCP Updates
 
@@ -272,7 +326,7 @@ sudo tail -50 /var/log/nginx/error.log
 
 ---
 
-## 10. Quick Reference
+## 11. Quick Reference
 
 ### Add New Quick Link
 1. Edit: `sudo micro /usr/local/hestia/web/js/quick-links.js`
@@ -298,7 +352,7 @@ sudo tail -50 /var/log/nginx/error.log
 
 ---
 
-## 11. Future Enhancements
+## 12. Future Enhancements
 
 ### Planned Features
 - [ ] Add more custom tools to Quick Links
@@ -313,7 +367,7 @@ sudo tail -50 /var/log/nginx/error.log
 
 ---
 
-## 12. Contact & Support
+## 13. Contact & Support
 
 ### Resources
 - **HestiaCP Docs:** https://hestiacp.com/docs/
